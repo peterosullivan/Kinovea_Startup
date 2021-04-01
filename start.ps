@@ -1,0 +1,71 @@
+function Click-MouseButton
+{
+    $signature=@' 
+      [DllImport("user32.dll",CharSet=CharSet.Auto, CallingConvention=CallingConvention.StdCall)]
+      public static extern void mouse_event(long dwFlags, long dx, long dy, long cButtons, long dwExtraInfo);
+'@ 
+
+    $SendMouseClick = Add-Type -memberDefinition $signature -name "Win32MouseEventNew" -namespace Win32Functions -passThru 
+
+        $SendMouseClick::mouse_event(0x00000002, 0, 0, 0, 0);
+        $SendMouseClick::mouse_event(0x00000004, 0, 0, 0, 0);
+}
+
+function Click-MouseButton-Right
+{
+    $signature=@' 
+      [DllImport("user32.dll",CharSet=CharSet.Auto, CallingConvention=CallingConvention.StdCall)]
+      public static extern void mouse_event(long dwFlags, long dx, long dy, long cButtons, long dwExtraInfo);
+'@ 
+
+    $SendMouseClick = Add-Type -memberDefinition $signature -name "Win32MouseEventNew" -namespace Win32Functions -passThru 
+
+        $SendMouseClick::mouse_event(0x00000008, 0, 0, 0, 0);
+        $SendMouseClick::mouse_event(0x00000010, 0, 0, 0, 0);
+}
+
+
+
+& "C:\Program Files (x86)\Kinovea\Kinovea.exe"
+Start-Sleep 3
+
+#$cursor = [system.windows.forms.cursor]::Clip
+[system.windows.forms.cursor]::Position
+#Write-Host $cursor
+
+
+#Open video
+[system.windows.forms.cursor]::Position = New-Object System.drawing.point(442,257)
+Click-MouseButton
+
+#Click 'One Capture screen and one Playback Screen' button
+[system.windows.forms.cursor]::Position = New-Object System.drawing.point(196,55)
+Click-MouseButton
+
+#Increase Capture delay
+[system.windows.forms.cursor]::Position = New-Object System.drawing.point(442,257)
+for ($num = 1 ; $num -le 3 ; $num++){
+    [system.windows.forms.sendkeys]::sendwait('{UP}')
+    Start-Sleep -Milliseconds 5
+}
+
+#Open Playback context menu 
+[system.windows.forms.cursor]::Position = New-Object System.drawing.point(1500,400)
+Click-MouseButton-Right
+
+#Open 'replay folder observer'
+[system.windows.forms.cursor]::Position = New-Object System.drawing.point(1500,560)
+Start-Sleep -Milliseconds 20
+[system.windows.forms.sendkeys]::sendwait('{ENTER}')
+Start-Sleep -Milliseconds 20
+[system.windows.forms.sendkeys]::sendwait('{ENTER}')
+
+#Decrease playback speed
+[system.windows.forms.sendkeys]::sendwait('{DOWN}')
+[system.windows.forms.sendkeys]::sendwait('{DOWN}')
+[system.windows.forms.sendkeys]::sendwait('{DOWN}')
+
+for ($num = 1 ; $num -le 8 ; $num++){
+    [system.windows.forms.sendkeys]::sendwait("^{UP}")
+    Start-Sleep -Milliseconds 5
+}
