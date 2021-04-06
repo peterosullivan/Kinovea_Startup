@@ -1,3 +1,8 @@
+#Set-ExecutionPolicy RemoteSigned
+
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
+
 function Click-MouseButton
 {
     $signature=@' 
@@ -27,15 +32,16 @@ function Click-MouseButton-Right
 
 
 & "C:\Program Files (x86)\Kinovea\Kinovea.exe"
-Start-Sleep 3
+Start-Sleep 5
 
 #$cursor = [system.windows.forms.cursor]::Clip
-[system.windows.forms.cursor]::Position
+#[system.windows.forms.cursor]::Position
 #Write-Host $cursor
 
 
 #Open video
-[system.windows.forms.cursor]::Position = New-Object System.drawing.point(442,257)
+[system.windows.forms.cursor]::Position = New-Object System.drawing.point(358, 247)
+Click-MouseButton
 Click-MouseButton
 
 #Click 'One Capture screen and one Playback Screen' button
@@ -43,11 +49,13 @@ Click-MouseButton
 Click-MouseButton
 
 #Increase Capture delay
-[system.windows.forms.cursor]::Position = New-Object System.drawing.point(442,257)
-for ($num = 1 ; $num -le 3 ; $num++){
-    [system.windows.forms.sendkeys]::sendwait('{UP}')
-    Start-Sleep -Milliseconds 5
-}
+[system.windows.forms.cursor]::Position = New-Object System.drawing.point(311, 949)
+Click-MouseButton
+[system.windows.forms.sendkeys]::sendwait('{BACKSPACE}')
+[system.windows.forms.sendkeys]::sendwait('{BACKSPACE}')
+[system.windows.forms.sendkeys]::sendwait('{BACKSPACE}')
+[system.windows.forms.sendkeys]::sendwait('2')
+
 
 #Open Playback context menu 
 [system.windows.forms.cursor]::Position = New-Object System.drawing.point(1500,400)
@@ -69,3 +77,6 @@ for ($num = 1 ; $num -le 8 ; $num++){
     [system.windows.forms.sendkeys]::sendwait("^{UP}")
     Start-Sleep -Milliseconds 5
 }
+
+#full screen
+[system.windows.forms.sendkeys]::sendwait('{F11}')
